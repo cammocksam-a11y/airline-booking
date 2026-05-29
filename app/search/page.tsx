@@ -1,10 +1,12 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 const airports = [
+
   { code: 'NZNE', name: 'Dairy Flat' },
   { code: 'YSSY', name: 'Sydney' },
   { code: 'NZRO', name: 'Rotorua' },
@@ -14,9 +16,17 @@ const airports = [
 
 ]
 
-function formatDateTime(dateStr: string, timezone: string) {
+function getTimezone(code: string) {
 
+  if (code === 'YSSY') return 'Australia/Sydney'
+  if (code === 'NZCI') return 'Pacific/Chatham'
+  return 'Pacific/Auckland'
+
+}
+
+function formatDateTime(dateStr: string, timezone: string) {
   return new Date(dateStr).toLocaleString('en-NZ', {
+
     timeZone: timezone,
     weekday: 'short',
     year: 'numeric',
@@ -29,31 +39,25 @@ function formatDateTime(dateStr: string, timezone: string) {
 
 }
 
-function getTimezone(code: string) {
-
-  if (code === 'YSSY') return 'Australia/Sydney'
-  if (code === 'NZCI') return 'Pacific/Chatham'
-
-  return 'Pacific/Auckland'
-
-}
-
 function getAircraftName(id: string) {
-
   if (id === 'SJ30i') return 'SyberJet SJ30i'
-  if (id.startsWith('SF50')) return 'Cirrus SF50'
-  if (id.startsWith('HJ')) return 'HondaJet Elite'
+  if (id?.startsWith('SF50')) return 'Cirrus SF50'
+  if (id?.startsWith('HJ')) return 'HondaJet Elite'
 
   return id
 
 }
 
-export default function SearchPage() {
+function SearchContent() {
 
-  const [orig, setOrig] = useState('')
-  const [dest, setDest] = useState('')
+  const searchParams = useSearchParams()
+
+  const [orig, setOrig] = useState(searchParams.get('orig') || '')
+  const [dest, setDest] = useState(searchParams.get('dest') || '')
+
   const [date1, setDate1] = useState('')
   const [date2, setDate2] = useState('')
+
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
@@ -65,7 +69,7 @@ export default function SearchPage() {
       setError('Please fill in all fields.')
 
       return
-
+    
     }
 
     if (orig === dest) {
@@ -75,7 +79,6 @@ export default function SearchPage() {
       return
     
     }
-
 
     setError('')
     setLoading(true)
@@ -101,16 +104,16 @@ export default function SearchPage() {
       {/* Search */}
       <div className="bg-white rounded-xl shadow-md p-6 mb-8 border border-slate-100">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-         
-         
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">From</label>
-            
+
             <select
               value={orig}
               onChange={e => setOrig(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
+
               <option value="">Select origin...</option>
               {airports.map(a => (
                 <option key={a.code} value={a.code}>{a.name} ({a.code})</option>
@@ -119,26 +122,23 @@ export default function SearchPage() {
 
           </div>
 
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">To</label>
-           
             <select
               value={dest}
               onChange={e => setDest(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
-
               <option value="">Select destination...</option>
               {airports.map(a => (
                 <option key={a.code} value={a.code}>{a.name} ({a.code})</option>
               ))}
             </select>
-
           </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">From Date</label>
-            
             <input
               type="date"
               value={date1}
@@ -146,10 +146,10 @@ export default function SearchPage() {
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">To Date</label>
-           
+
             <input
               type="date"
               value={date2}
@@ -172,13 +172,15 @@ export default function SearchPage() {
 
       </div>
 
-      {/* The Result */}
-
+      {/* Result */}
       {searched && results.length === 0 && (
+
         <p className="text-slate-500 text-center py-8">No flights found for those dates. Try a wider date range.</p>
-      )}
+     
+     )}
 
       {results.length > 0 && (
+
         <div className="space-y-4">
           <p className="text-slate-600 text-sm">{results.length} flight{results.length !== 1 ? 's' : ''} found</p>
           {results.map((flight) => (
@@ -186,6 +188,7 @@ export default function SearchPage() {
             <div key={flight._id} className="bg-white rounded-xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
+
 
                   <div className="flex items-center gap-3 mb-1">
                     <span className="text-lg font-bold text-slate-800">{flight.flightNumber}</span>
@@ -210,14 +213,15 @@ export default function SearchPage() {
                 </div>
 
                 <div className="text-right">
-                 
+
                   <div className="text-2xl font-bold text-sky-600 mb-1">${flight.price}</div>
-                 
+                  
                   <div className={`text-sm mb-3 ${seatsLeft(flight) <= 1 ? 'text-red-500' : 'text-slate-500'}`}>
                     {seatsLeft(flight)} seat{seatsLeft(flight) !== 1 ? 's' : ''} left
                   </div>
-               
+
                   {seatsLeft(flight) > 0 ? (
+
                     <Link
                       href={`/booking?flightId=${flight._id}`}
                       className="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
@@ -225,8 +229,8 @@ export default function SearchPage() {
                       Book Now
                     </Link>
 
-                  ) : (
 
+                  ) : (
                     <span className="bg-slate-200 text-slate-500 font-semibold px-4 py-2 rounded-lg text-sm">
                       Full
                     </span>
@@ -234,22 +238,31 @@ export default function SearchPage() {
                   )}
 
                 </div>
-                
               </div>
-
             </div>
 
-))}
+
+          ))}
+
         </div>
 
       )}
 
     </div>
+
   )
 
 }
 
+export default function SearchPage() {
+
+  return (
+    <Suspense fallback={<div className="text-center py-12 text-slate-500">Loading...</div>}>
+      <SearchContent />
+    </Suspense>
+
+  )
 
 
-
+}
 

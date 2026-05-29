@@ -35,11 +35,12 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { from: 'Dairy Flat', to: 'Sydney', freq: 'Weekly', aircraft: 'SyberJet SJ30i', seats: 6, emoji: '🇦🇺' },
-            { from: 'Dairy Flat', to: 'Rotorua', freq: 'Twice daily, Mon–Fri', aircraft: 'Cirrus SF50', seats: 4, emoji: '🌋' },
-            { from: 'Dairy Flat', to: 'Great Barrier Island', freq: '3x weekly', aircraft: 'Cirrus SF50', seats: 4, emoji: '🏝️' },
-            { from: 'Dairy Flat', to: 'Chatham Islands', freq: 'Twice weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🌊' },
-            { from: 'Dairy Flat', to: 'Lake Tekapo', freq: 'Weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🏔️' },
+            { from: 'Dairy Flat', to: 'Sydney', freq: 'Weekly', aircraft: 'SyberJet SJ30i', seats: 6, emoji: '🇦🇺', orig: 'NZNE', dest: 'YSSY' },
+            { from: 'Dairy Flat', to: 'Rotorua', freq: 'Twice daily, Mon–Fri', aircraft: 'Cirrus SF50', seats: 4, emoji: '🌋', orig: 'NZNE', dest: 'NZRO' },
+            { from: 'Dairy Flat', to: 'Great Barrier Island', freq: '3x weekly', aircraft: 'Cirrus SF50', seats: 4, emoji: '🏝️', orig: 'NZNE', dest: 'NZGB' },
+            { from: 'Dairy Flat', to: 'Chatham Islands', freq: 'Twice weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🌊', orig: 'NZNE', dest: 'NZCI' },
+            { from: 'Dairy Flat', to: 'Lake Tekapo', freq: 'Weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🏔️', orig: 'NZNE', dest: 'NZTL' },
+   
           ].map((route) => (
             
             <div key={route.to} className="bg-white rounded-xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition-shadow">
@@ -56,7 +57,6 @@ export default function Home() {
                 href="/search"
                 className="mt-4 inline-block text-sky-600 hover:text-sky-500 text-sm font-medium"
               >
-
                 Book now →
               </Link>
 
