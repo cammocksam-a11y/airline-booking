@@ -34,35 +34,33 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Our Routes</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { from: 'Dairy Flat', to: 'Sydney', freq: 'Weekly', aircraft: 'SyberJet SJ30i', seats: 6, emoji: '🇦🇺', orig: 'NZNE', dest: 'YSSY' },
-            { from: 'Dairy Flat', to: 'Rotorua', freq: 'Twice daily, Mon–Fri', aircraft: 'Cirrus SF50', seats: 4, emoji: '🌋', orig: 'NZNE', dest: 'NZRO' },
-            { from: 'Dairy Flat', to: 'Great Barrier Island', freq: '3x weekly', aircraft: 'Cirrus SF50', seats: 4, emoji: '🏝️', orig: 'NZNE', dest: 'NZGB' },
-            { from: 'Dairy Flat', to: 'Chatham Islands', freq: 'Twice weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🌊', orig: 'NZNE', dest: 'NZCI' },
-            { from: 'Dairy Flat', to: 'Lake Tekapo', freq: 'Weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🏔️', orig: 'NZNE', dest: 'NZTL' },
-   
-          ].map((route) => (
-            
-            <div key={route.to} className="bg-white rounded-xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition-shadow">
-              
-              <div className="text-3xl mb-3">{route.emoji}</div>
-              
-              <h3 className="font-bold text-lg text-slate-800">{route.from} → {route.to}</h3>
-              
-              <p className="text-slate-500 text-sm mt-1">{route.freq}</p>
-              
-              <p className="text-slate-500 text-sm">{route.aircraft} · {route.seats} seats</p>
+         {[
+           { from: 'Dairy Flat', to: 'Sydney', freq: 'Weekly', aircraft: 'SyberJet SJ30i', seats: 6, emoji: '🌏', orig: 'NZNE', dest: 'YSSY' },
+           { from: 'Dairy Flat', to: 'Rotorua', freq: 'Twice daily, Mon–Fri', aircraft: 'Cirrus SF50', seats: 4, emoji: '🌋', orig: 'NZNE', dest: 'NZRO' },
+           { from: 'Dairy Flat', to: 'Great Barrier Island', freq: '3x weekly', aircraft: 'Cirrus SF50', seats: 4, emoji: '🏝️', orig: 'NZNE', dest: 'NZGB' },
+           { from: 'Dairy Flat', to: 'Chatham Islands', freq: 'Twice weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🌊', orig: 'NZNE', dest: 'NZCI' },
+           { from: 'Dairy Flat', to: 'Lake Tekapo', freq: 'Weekly', aircraft: 'HondaJet Elite', seats: 5, emoji: '🏔️', orig: 'NZNE', dest: 'NZTL' },
+         ].map((route) => (
+         
+         <div key={route.to} className="bg-white rounded-xl shadow-md p-6 border border-slate-100 hover:shadow-lg transition-shadow">
+          
+          <div className="text-3xl mb-3">{route.emoji}</div>
 
-              <Link
-                href="/search"
-                className="mt-4 inline-block text-sky-600 hover:text-sky-500 text-sm font-medium"
-              >
-                Book now →
-              </Link>
+          <h3 className="font-bold text-lg text-slate-800">{route.from} → {route.to}</h3>
 
-            </div>
+         <p className="text-slate-500 text-sm mt-1">{route.freq}</p>
+         <p className="text-slate-500 text-sm">{route.aircraft} · {route.seats} seats</p>
 
-          ))}
+
+         <Link
+         href={`/search?orig=${route.orig}&dest=${route.dest}`}
+         className="mt-4 inline-block text-sky-600 hover:text-sky-500 text-sm font-medium"
+          >
+         Book now →
+          </Link>
+       </div>
+
+    ))}
 
 
         </div>
